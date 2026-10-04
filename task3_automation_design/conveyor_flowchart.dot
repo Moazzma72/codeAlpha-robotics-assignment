@@ -1,0 +1,34 @@
+digraph conveyor {
+  graph [rankdir=TB, fontname="Helvetica", nodesep=0.45, ranksep=0.38, dpi=200, pad=0.2];
+  node  [fontname="Helvetica", fontsize=11, style="filled", color="#37474F", penwidth=1.3];
+  edge  [fontname="Helvetica-Bold", fontsize=10, color="#37474F", arrowsize=0.8];
+
+  start [label="START\n(power on)", shape=oval, fillcolor="#A5D6A7"];
+  init  [label="Initialise I/O, LCD and servo\n(diverter at 0°)\nSet counters to zero", shape=box, fillcolor="#BBDEFB"];
+  run   [label="Start conveyor motor\nGreen LED ON", shape=box, fillcolor="#BBDEFB"];
+  fault [label="E-stop pressed\nOR entry sensor blocked > 5 s\n(jam)?", shape=diamond, fillcolor="#FFF59D"];
+  stop  [label="Stop motor\nRed LED + buzzer ON\nShow FAULT on LCD", shape=box, fillcolor="#FFAB91"];
+  reset [label="Reset button\npressed?", shape=diamond, fillcolor="#FFF59D"];
+  obj   [label="Entry sensor (IR)\ndetects object?", shape=diamond, fillcolor="#FFF59D"];
+  count [label="Total count + 1", shape=box, fillcolor="#BBDEFB"];
+  wait  [label="Wait travel time T1\n(object reaches diverter station)", shape=box, fillcolor="#BBDEFB"];
+  metal [label="Inductive sensor\ndetects metal?", shape=diamond, fillcolor="#FFF59D"];
+  divert[label="Metal count + 1\nServo to 90° for T2 (push to Bin B)\nReturn to 0°", shape=box, fillcolor="#BBDEFB"];
+  pass  [label="Object continues\nto Bin A (non-metal)\nNon-metal count + 1", shape=box, fillcolor="#BBDEFB"];
+  lcd   [label="Update LCD:\ntotal / metal / non-metal", shape=box, fillcolor="#BBDEFB"];
+
+  start -> init -> run -> fault;
+  fault -> stop  [label=" Yes"];
+  fault -> obj   [label=" No fault"];
+  stop  -> reset;
+  reset -> stop  [label=" No", constraint=false];
+  reset -> run   [label=" Yes", constraint=false];
+  obj   -> count [label=" Yes"];
+  obj   -> fault [label=" No", constraint=false];
+  count -> wait -> metal;
+  metal -> divert [label=" Yes"];
+  metal -> pass   [label=" No"];
+  divert -> lcd;
+  pass   -> lcd;
+  lcd -> fault [constraint=false];
+}
