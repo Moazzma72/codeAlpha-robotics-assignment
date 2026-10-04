@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<robot name="arm4dof">
+  <link name="base">
+    <visual><geometry><mesh filename="base.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_base"><color rgba="0.25 0.25 0.28 1"/></material></visual>
+    <collision><geometry><mesh filename="base.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="turret">
+    <visual><geometry><mesh filename="turret.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_turret"><color rgba="0.15 0.35 0.65 1"/></material></visual>
+    <collision><geometry><mesh filename="turret.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="upper_arm">
+    <visual><geometry><mesh filename="upper_arm.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_upper_arm"><color rgba="0.95 0.55 0.10 1"/></material></visual>
+    <collision><geometry><mesh filename="upper_arm.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="forearm">
+    <visual><geometry><mesh filename="forearm.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_forearm"><color rgba="0.95 0.75 0.15 1"/></material></visual>
+    <collision><geometry><mesh filename="forearm.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="wrist_gripper">
+    <visual><geometry><mesh filename="wrist_gripper.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_wrist_gripper"><color rgba="0.30 0.65 0.40 1"/></material></visual>
+    <collision><geometry><mesh filename="wrist_gripper.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="finger_l">
+    <visual><geometry><mesh filename="finger.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_finger_l"><color rgba="0.55 0.55 0.60 1"/></material></visual>
+    <collision><geometry><mesh filename="finger.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <link name="finger_r">
+    <visual><geometry><mesh filename="finger.stl" scale="0.001 0.001 0.001"/></geometry><material name="m_finger_r"><color rgba="0.55 0.55 0.60 1"/></material></visual>
+    <collision><geometry><mesh filename="finger.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+    <inertial><mass value="0.5"/><inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="J1_base_yaw" type="revolute"><parent link="base"/><child link="turret"/><origin xyz="0 0 0" rpy="0 0 0"/><axis xyz="0 0 1"/>
+    <limit lower="-2.96706" upper="2.96706" effort="50" velocity="2.0"/></joint>
+  <joint name="J2_shoulder" type="revolute"><parent link="turret"/><child link="upper_arm"/><origin xyz="0 0 0.15" rpy="0 0 0"/><axis xyz="0 -1 0"/>
+    <limit lower="-0.17453" upper="2.96706" effort="50" velocity="2.0"/></joint>
+  <joint name="J3_elbow" type="revolute"><parent link="upper_arm"/><child link="forearm"/><origin xyz="0.3 0 0" rpy="0 0 0"/><axis xyz="0 -1 0"/>
+    <limit lower="-2.61799" upper="0.00000" effort="50" velocity="2.0"/></joint>
+  <joint name="J4_wrist" type="revolute"><parent link="forearm"/><child link="wrist_gripper"/><origin xyz="0.25 0 0" rpy="0 0 0"/><axis xyz="0 -1 0"/>
+    <limit lower="-2.09440" upper="2.09440" effort="50" velocity="2.0"/></joint>
+  <joint name="G1_finger_left" type="prismatic"><parent link="wrist_gripper"/><child link="finger_l"/><origin xyz="0.07 0.045 0" rpy="0 0 0"/><axis xyz="0 -1 0"/>
+    <limit lower="0" upper="0.02" effort="50" velocity="2.0"/></joint>
+  <joint name="G1_finger_right" type="prismatic"><parent link="wrist_gripper"/><child link="finger_r"/><origin xyz="0.07 -0.045 0" rpy="0 0 0"/><axis xyz="0 1 0"/>
+    <limit lower="0" upper="0.02" effort="50" velocity="2.0"/></joint>
+</robot>
